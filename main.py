@@ -291,9 +291,18 @@ def Fatui(inputFilePath: str, outputFilePath: str):
 
     img.save(outputFilePath)  # saves image
 
+    Image.open(outputFilePath).save(outputFilePath[:-3]+"png")  # converting to a png
+
+
+def ImToFile(inputFilePath: str):
+    Image.open(inputFilePath).save(inputFilePath[:-3] + "bmp")  # converting to a bmp
+
 
 if len(sys.argv) > 2:  # makes sure more than 1 parameter is supplied
-    Fatui(sys.argv[1], sys.argv[2])
+    if sys.argv[1] == "-a":
+        Fatui(sys.argv[2], sys.argv[3])
+    elif sys.argv[1] == "-r":
+        ImToFile(sys.argv[2])
 else:  # print a message of how to use the program
     print("file2bmp55 by koleq (C)2021\n\n" +
           "# How to use\n\n" +
