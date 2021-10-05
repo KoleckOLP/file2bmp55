@@ -23,6 +23,7 @@ def Fatui(inputFilePath: str, outputFilePath: str):
         inputFile[height - 1].extend(zeros)  # adds zero padding if last array is shorter
 
     img = Image.new('P', (height, width), 0)  # this normally makes a grayscale image
+
     img.putpalette([
         0, 0, 0,
         128, 0, 0,
@@ -281,6 +282,7 @@ def Fatui(inputFilePath: str, outputFilePath: str):
         228, 228, 228,
         238, 238, 238,
     ])  # this palette adds colors (probably Xterm 255 color palette, I do not remember)
+
     pixels = img.load()  # no idea what this does
 
     for i in range(img.size[0]):  # loops through my 2D array of bytes and writes them as pixels
@@ -306,8 +308,9 @@ if len(sys.argv) > 2:  # makes sure more than 1 parameter is supplied
 else:  # print a message of how to use the program
     print("file2bmp55 by koleq (C)2021\n\n" +
           "# How to use\n\n" +
-          "python main.py input_file_path output_file_path.bmp\n\n" +
+          "archive:\n" +
+          "python main.py -a input_file_path output_file_path.bmp\n\n" +
           "## input can be any file that you want\n" +
-          "## output has to be .bmp")
-
-
+          "## output has to be .bmp\n\n" +
+          "recover:\n" +
+          "python main.py -r input_file_path")
