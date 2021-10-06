@@ -3,7 +3,7 @@ from PIL import Image
 from math import sqrt, ceil
 
 
-def Fatui(inputFilePath: str, outputFilePath: str):
+def Fatui(inputFilePath: str):
     inputFile = open(inputFilePath, "rb").read()  # reads bytes from a file to bytes
 
     inputFile = list(inputFile)  # converts bytes to array
@@ -289,28 +289,59 @@ def Fatui(inputFilePath: str, outputFilePath: str):
         for j in range(img.size[1]):
             pixels[i, j] = inputFile[i][j]
 
-    os.makedirs(os.path.dirname(os.path.realpath(outputFilePath)), exist_ok=True)  # creates directories if necessary
+    bitmap = os.path.splitext(inputFilePath)[0] + ".bmp"
 
-    img.save(outputFilePath)  # saves image
+    img.save(bitmap)  # saves image
 
-    Image.open(outputFilePath).save(outputFilePath[:-3]+"png")  # converting to a png
+    png = inputFilePath + ".png"
+
+    Image.open(bitmap).save(png)  # converting to a png
+
+    os.remove(bitmap)
+
+    print(f"archived {png} from {inputFilePath}")
 
 
 def ImToFile(inputFilePath: str):
-    Image.open(inputFilePath).save(inputFilePath[:-3] + "bmp")  # converting to a bmp
+    bmp = inputFilePath[:-3] + "bmp"
+
+    Image.open(inputFilePath).save(bmp)  # converting to a bmp
+
+    img = Image.open(bmp)
+    pixels = img.convert('P')
+
+    data = []
+
+    for i in range(img.size[0]):  # loops through my 2D array of bytes and reads pixels
+        for j in range(img.size[1]):
+            data = data + [pixels.getpixel((i, j))]
+
+    dataHex = bytearray(data)
+
+    outputFile = os.path.splitext(inputFilePath)[0]
+    outputFile = os.path.splitext(outputFile)[0] + "_recovered" + os.path.splitext(outputFile)[1]
+
+    with open(outputFile, "wb") as file:
+        file.write(dataHex)
+
+    img.close()
+
+    os.remove(bmp)
+
+    print(f"recovered {outputFile} from {inputFilePath}")
 
 
 if len(sys.argv) > 2:  # makes sure more than 1 parameter is supplied
     if sys.argv[1] == "-a":
-        Fatui(sys.argv[2], sys.argv[3])
+        Fatui(sys.argv[2])
     elif sys.argv[1] == "-r":
         ImToFile(sys.argv[2])
 else:  # print a message of how to use the program
     print("file2bmp55 by koleq (C)2021\n\n" +
           "# How to use\n\n" +
           "archive:\n" +
-          "python main.py -a input_file_path output_file_path.bmp\n\n" +
+          "f2i.py -a input_file_path\n\n" +
           "## input can be any file that you want\n" +
-          "## output has to be .bmp\n\n" +
+          "## output will to be a png\n\n" +
           "recover:\n" +
-          "python main.py -r input_file_path")
+          "f2i.py -r input_file_path")
