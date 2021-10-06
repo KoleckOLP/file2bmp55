@@ -289,7 +289,7 @@ def Fatui(inputFilePath: str):
         for j in range(img.size[1]):
             pixels[i, j] = inputFile[i][j]
 
-    bitmap = os.path.splitext(inputFilePath)[0] + ".bmp"
+    bitmap = inputFilePath + ".bmp"
 
     img.save(bitmap)  # saves image
 
@@ -303,7 +303,7 @@ def Fatui(inputFilePath: str):
 
 
 def ImToFile(inputFilePath: str):
-    bmp = inputFilePath[:-3] + "bmp"
+    bmp = os.path.splitext(inputFilePath)[0] + ".bmp"
 
     Image.open(inputFilePath).save(bmp)  # converting to a bmp
 
