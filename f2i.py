@@ -2,6 +2,9 @@ import os, sys
 from PIL import Image
 from math import sqrt, ceil
 
+# bypass warming image could be a zipbomb
+Image.MAX_IMAGE_PIXELS = 1000000000
+
 
 def Fatui(inputFilePath: str):
     inputFile = open(inputFilePath, "rb").read()  # reads bytes from a file to bytes
@@ -314,7 +317,7 @@ def ImToFile(inputFilePath: str):
 
     for i in range(img.size[0]):  # loops through my 2D array of bytes and reads pixels
         for j in range(img.size[1]):
-            data = data + [pixels.getpixel((i, j))]
+            data.append(pixels.getpixel((i, j)))
 
     dataHex = bytearray(data)
 
